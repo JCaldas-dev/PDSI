@@ -1,5 +1,5 @@
 module mux(A, B, Sel, Y);
-input A, B, Sel;
+input signed A, B, Sel;
 output reg Y;
 			  
 always @*

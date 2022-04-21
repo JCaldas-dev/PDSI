@@ -50,12 +50,16 @@ module rec2pol(
 wire  [5:0] counter;
 
 ITERCOUNTER icounter(
-					.clock( clock ),
-					.reset( reset ),
-					.start( start ),
-					.enable( enable),
-					.count( counter)
+					 .clock( clock ),
+					 .reset( reset ),
+					 .start( start ),
+					 .enable( enable ),
+					 .count( counter )
 					);
-
+					
+ATAM_ROM atam(
+			 .addr( clock ),
+			 .data( reset )
+			);
 endmodule
 // end of module rec2pol
