@@ -7,7 +7,9 @@ module psdsqrt(
 				output reg [15:0] sqrt
 			  );
 
-reg signed [31:0] Q;
+wire [31:0] Q;
+wire [15:0] aux;
+
 reg signed [31:0] sqtestsqrt;
 reg signed [15:0] testsqrt;
 reg signed [15:0] leftD;
@@ -32,7 +34,7 @@ begin
 end
 end
 
-dff init( 
+dff32 init( 
 		 .CLK(clock),
 		 .en(start),
 		 .reset(reset),
@@ -40,12 +42,12 @@ dff init(
 		 .Qout(Q)
 		);
 
-dff out(
+dff16 out(
 		 .CLK(clock),
 		 .en(stop),
 		 .reset(reset),
 		 .Din(tempsqrt),
-		 .Qout(sqrt)
+		 .Qout(aux)
 		);
 
 always @*
@@ -70,5 +72,6 @@ else
 
 testsqrt = tempsqrt | rightQ;
 
+sqrt = aux;
 end		
 endmodule
