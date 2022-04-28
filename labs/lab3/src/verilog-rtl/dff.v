@@ -1,14 +1,14 @@
-module dff( CLK, en, reset, D, Q);
-input CLK, en, reset, D;
-output reg Q;
+module dff( CLK, en, reset, Din, Qout);
+input CLK, en, reset, Din;
+output reg Qout;
 
 always @(posedge CLK)
 if(reset)
-    Q <= 0;
+    Qout <= 0;
 else
 begin
 	if( en )
-		Q <= D;
+		Qout <= Din;
 end
 
 endmodule

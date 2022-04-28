@@ -7,54 +7,45 @@ module psdsqrt(
 				output reg [15:0] sqrt
 			  );
 
-wire [31:0] Q;
-wire [31:0] sqtestsqrt;
-wire [15:0] testsqrt;
-wire [15:0] leftD;
-wire [15:0] rightD;
-wire [15:0] rightQ;
+reg signed [31:0] Q;
+reg signed [31:0] sqtestsqrt;
+reg signed [15:0] testsqrt;
+reg signed [15:0] leftD;
+reg signed [15:0] rightD;
+
+reg signed[15:0] tempsqrt;
+reg signed[15:0] rightQ;
 
 always@(posedge clock)
 begin
 if(reset)
 begin
-    Q = 32'h0;
-	sqrt = 16'h0;
-	tempsqrt = 16'h0;
-	rightQ = 16'h0;
+    Q <= 32'h0;
+	sqrt <= 16'h0;
+	tempsqrt <= 16'h0;
+	rightQ <= 16'h0;
+end
+else
+begin
+	tempsqrt <= leftD;
+	rightQ <= rightD;
 end
 end
 
 dff init( 
-		 .addr( clock ),
-		 .data( start ),
-		 .data( reset ),
-		 .data( xin ),
-		 .data( Q )
-		);
-			
-dff leftreg(
-		 .addr( clock ),
-		 .data( 16'd1 ),
-		 .data( reset ),
-		 .data( leftD ),
-		 .data( tempsqrt )
-		);
-		
-dff rightreg(
-		 .addr( clock ),
-		 .data( 1 ),
-		 .data( reset ),
-		 .data( rightD ),
-		 .data( rightQ )
+		 .CLK(clock),
+		 .en(start),
+		 .reset(reset),
+		 .Din(xin),
+		 .Qout(Q)
 		);
 
 dff out(
-		 .addr( clock ),
-		 .data( stop ),
-		 .data( reset ),
-		 .data( tempsqrt ),
-		 .data( sqrt )
+		 .CLK(clock),
+		 .en(stop),
+		 .reset(reset),
+		 .Din(tempsqrt),
+		 .Qout(sqrt)
 		);
 
 always @*
@@ -63,10 +54,10 @@ begin
 sqtestsqrt = testsqrt * testsqrt;
 
 if (start) 
-    D = 16'd0;
+    leftD = 16'h0000;
 else 
 begin
-    if (Q >= ( sqtestsqrt ))
+    if (Q >= (sqtestsqrt))
         leftD = testsqrt;
     else
         leftD = tempsqrt;
