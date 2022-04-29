@@ -49,14 +49,32 @@ psdsqrt psdsqrt_1
 
 //---------------------------------------------------
 // Setup initial signals
+integer               data_file    ; // file handler
+integer               scan_file    ; // file handler
+logic [5:0] arg0; //bytes
+logic [63:0] arg1; //sqrt test
+`define NULL 0    
+
+
 initial
 begin
-	NBITSIN = 6'd6;
-  clock = 1'b0;
-  reset = 1'b0;
-  x = 0;
-  start = 1'b0;
-  stop  = 1'b0;
+	data_file = $fopen("simargs.txt", "r");
+	if (data_file == `NULL) begin
+		$display("data_file handle was NULL");
+		$finish;
+	end
+
+	scan_file = $fscanf(data_file, "%d\n", arg0);
+	scan_file = $fscanf(data_file, "%d\n", arg1);
+	$display("TEST: %d", arg0);
+	$display("TEST: %d", arg1);
+
+	NBITSIN = arg0;
+	clock = 1'b0;
+	reset = 1'b0;
+	x = 0;
+	start = 1'b0;
+	stop  = 1'b0;
 end
 
 //---------------------------------------------------
@@ -96,26 +114,6 @@ end
 //---------------------------------------------------
 // The verification program (THIS IS TRUE A PROGRAM!)
 
-integer               data_file    ; // file handler
-integer               scan_file    ; // file handler
-logic   signed [21:0] captured_data;
-`define NULL 0    
-
-initial begin
-  data_file = $fopen("simargs.txt", "r");
-  if (data_file == `NULL) begin
-    $display("data_file handle was NULL");
-    $finish;
-  end
-end
-
-always @(posedge clock) begin
-  scan_file = $fscanf(data_file, "%d\n", captured_data);
-  if (!$feof(data_file)) begin
-    //use captured_data as you would any other wire or reg value;
-  end
-end
-
 initial
 begin
 
@@ -123,10 +121,10 @@ begin
   #( 10*CLOCK_PERIOD );
 
   // Example of calling task 'execsqrt':
-  execsqrt( captured_data );
+  execsqrt( arg1 );
 
   // Example of calling the golden sqrt function:
-  $display("%d",  golden_sqrt( captured_data ) );
+  $display("%d",  golden_sqrt( arg1 ) );
 
   $display("Groupid = %h", `GROUPID );
 
