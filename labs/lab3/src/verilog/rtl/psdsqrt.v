@@ -7,40 +7,40 @@ module psdsqrt(
 				output reg [15:0] sqrt
 			  );
 
-reg signed [31:0] Q;
+//reg signed [31:0] Q;
 wire [15:0] aux;
-wire [31:0] auxQ;
+wire [31:0] Q;
 
-reg signed [31:0] sqtestsqrt;
-reg signed [15:0] testsqrt;
-reg signed [15:0] leftD;
-reg signed [15:0] rightD;
+wire [31:0] sqtestsqrt;
+wire [15:0] testsqrt;
+reg [15:0] leftD;
+reg [15:0] rightD;
 
-reg signed[15:0] tempsqrt;
-reg signed[15:0] rightQ;
+reg [15:0] tempsqrt;
+reg [15:0] rightQ;
 
 always@(posedge clock)
 begin
-if(reset)
+/*if(reset)
 begin
-  Q <= 32'h0;
+  Q = 32'h0;
 	sqrt <= 16'h0;
 	tempsqrt <= 16'h0;
 	rightQ <= 16'h0;
 end
 else
-begin
+begin*/
 	tempsqrt <= leftD;
 	rightQ <= rightD;
 end
-end
+//end
 
 dff32 init(
 		 .CLK(clock),
 		 .en(start),
 		 .reset(reset),
 		 .Din(xin),
-		 .Qout(auxQ)
+		 .Qout(Q)
 		);
 
 dff16 out(
@@ -51,16 +51,17 @@ dff16 out(
 		 .Qout(aux)
 		);
 
+assign sqtestsqrt = testsqrt * testsqrt;
+assign testsqrt = tempsqrt | rightQ;
+
 always @*
 begin
 
-sqtestsqrt = testsqrt * testsqrt;
 
 if (start)
     leftD = 16'h0000;
 else
 begin
-    Q = auxQ;
     if (Q >= (sqtestsqrt))
         leftD = testsqrt;
     else
@@ -72,8 +73,9 @@ if (start)
 else
     rightD = rightQ >> 1;
 
-testsqrt = tempsqrt | rightQ;
+
 
 sqrt = aux;
 end
+
 endmodule

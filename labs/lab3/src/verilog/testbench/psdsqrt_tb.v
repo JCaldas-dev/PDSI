@@ -87,7 +87,7 @@ end
 initial
 begin
 	$dumpfile("mysimdata.vcd");// The filename with the waveform data
-	$dumpvars;
+	$dumpvars(0, psdsqrt_tb);
 // The root node to dump
 end
 
@@ -100,10 +100,10 @@ begin
   #( 10*CLOCK_PERIOD );
 
   // Example of calling task 'execsqrt':
-  execsqrt( 25 );
+  execsqrt( 4291 );
 
   // Example of calling the golden sqrt function:
-  $display("%d",  golden_sqrt( 25 ) );
+  $display("%d",  golden_sqrt( 4291 ) );
 
   $display("Groupid = %h", `GROUPID );
 
