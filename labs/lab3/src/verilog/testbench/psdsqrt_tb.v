@@ -1,21 +1,24 @@
-/* 
+/*
 PSD 2021-2022
 
 Lab 1 - Design and verification of a sequential square root calculator
 
 	This Verilog code is property of University of Porto
 	Its utilization beyond the scope of the course Digital Systems Design
-	(Projeto de Sistemas Digitais) of the Master in Electrical 
+	(Projeto de Sistemas Digitais) of the Master in Electrical
 	and Computer Engineering requires explicit authorization from the author.
-	
+
 	jca@fe.up.pt, April 2022
-	
+
 */
-`timescale 1ns / 1ns;
+
+`timescale 1ns / 1ns
+
+
 
 module psdsqrt_tb;
- 
-// general parameters 
+
+// general parameters
 parameter CLOCK_PERIOD = 10;              // Clock period in ns
 parameter MAX_SIM_TIME = 100_000_000;     // Set the maximum simulation time (time units=ns)
 
@@ -31,18 +34,18 @@ wire [15:0] sqrt;
 
 // Instantiate the module under verification:
 psdsqrt psdsqrt_1
-      ( 
+      (
 	    .clock(clock), // master clock, active in the positive edge
         .reset(reset), // master reset, synchronous and active high
-		
+
         .start(start), // set to 1 during one clock cycle to start a sqrt
         .stop(stop),   // set to 1 during one clock cycle to load the output registers
-		
-        .x(x),       // the operands
+
+        .xin(x),       // the operands
         .sqrt(sqrt)
-        ); 
-      
-        
+        );
+
+
 //---------------------------------------------------
 // Setup initial signals
 initial
@@ -57,7 +60,7 @@ end
 //---------------------------------------------------
 // generate a 50% duty-cycle clock signal
 initial
-begin  
+begin
   forever
     # (CLOCK_PERIOD / 2 ) clock = ~clock;
 end
@@ -66,7 +69,7 @@ end
 // Apply the initial reset for 2 clock cycles:
 initial
 begin
-  # (CLOCK_PERIOD/3) // wait a fraction of the clock period to 
+  # (CLOCK_PERIOD/3) // wait a fraction of the clock period to
                      // misalign the reset pulse with the clock edges:
   reset = 1;
   # (2 * CLOCK_PERIOD ) // apply the reset for 2 clock periods
@@ -81,26 +84,33 @@ begin
   $stop;
 end
 
+initial
+begin
+	$dumpfile("mysimdata.vcd");// The filename with the waveform data
+	$dumpvars;
+// The root node to dump
+end
+
 //---------------------------------------------------
 // The verification program (THIS IS TRUE A PROGRAM!)
 initial
 begin
-  
+
   // Wait 10 clock periods
   #( 10*CLOCK_PERIOD );
-  
+
   // Example of calling task 'execsqrt':
-  execsqrt( 123456 );
+  execsqrt( 25 );
 
   // Example of calling the golden sqrt function:
-  $display("%d",  golden_sqrt( 123456 ) );
+  $display("%d",  golden_sqrt( 25 ) );
 
   $display("Groupid = %h", `GROUPID );
 
   // COMPLETE..
-  
+
   #( 10*CLOCK_PERIOD );
-  $stop;  
+  $stop;
 end
 
 
@@ -113,20 +123,20 @@ begin
   @(negedge clock);
   start = 1'b1;       // Assert start
   @(negedge clock );
-  start = 1'b0;  
+  start = 1'b0;
   repeat (16) @(posedge clock);  // Execute division
   @(negedge clock);
   stop = 1'b1;        // Assert stop
   @(negedge clock);
   stop = 1'b0;
   @(negedge clock);
-  
+
   // Print the results:
   // You may not watt to do this when verifying some millions of operands...
   // Add a flag to enable/disable this print
-  
+
   $display("SQRT(%d) = %d", x, sqrt );
-  end  
+  end
 endtask
 
 
@@ -155,4 +165,3 @@ end
 endfunction
 
 endmodule
-			   
