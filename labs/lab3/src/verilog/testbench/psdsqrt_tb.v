@@ -26,10 +26,10 @@ parameter MAX_SIM_TIME = 100_000_000;     // Set the maximum simulation time (ti
 // Registers for driving the inputs:
 reg  clock, reset;
 reg  start, stop;
-reg  [31:0] x;
-
+reg  [63:0] x;
+reg [5:0] NBITSIN;
 // Wires to connect to the outputs:
-wire [15:0] sqrt;
+wire [31:0] sqrt;
 
 
 // Instantiate the module under verification:
@@ -41,6 +41,7 @@ psdsqrt psdsqrt_1
         .start(start), // set to 1 during one clock cycle to start a sqrt
         .stop(stop),   // set to 1 during one clock cycle to load the output registers
 
+				.NBITSIN(NBITSIN),
         .xin(x),       // the operands
         .sqrt(sqrt)
         );
@@ -50,6 +51,7 @@ psdsqrt psdsqrt_1
 // Setup initial signals
 initial
 begin
+	NBITSIN = 6'd6;
   clock = 1'b0;
   reset = 1'b0;
   x = 0;
@@ -93,6 +95,27 @@ end
 
 //---------------------------------------------------
 // The verification program (THIS IS TRUE A PROGRAM!)
+
+integer               data_file    ; // file handler
+integer               scan_file    ; // file handler
+logic   signed [21:0] captured_data;
+`define NULL 0    
+
+initial begin
+  data_file = $fopen("simargs.txt", "r");
+  if (data_file == `NULL) begin
+    $display("data_file handle was NULL");
+    $finish;
+  end
+end
+
+always @(posedge clock) begin
+  scan_file = $fscanf(data_file, "%d\n", captured_data);
+  if (!$feof(data_file)) begin
+    //use captured_data as you would any other wire or reg value;
+  end
+end
+
 initial
 begin
 
@@ -100,10 +123,10 @@ begin
   #( 10*CLOCK_PERIOD );
 
   // Example of calling task 'execsqrt':
-  execsqrt( 4291 );
+  execsqrt( captured_data );
 
   // Example of calling the golden sqrt function:
-  $display("%d",  golden_sqrt( 4291 ) );
+  $display("%d",  golden_sqrt( captured_data ) );
 
   $display("Groupid = %h", `GROUPID );
 
