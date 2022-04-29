@@ -1,5 +1,5 @@
 $date
-	Fri Apr 29 21:07:16 2022
+	Fri Apr 29 21:23:51 2022
 $end
 $version
 	Icarus Verilog
@@ -34,7 +34,7 @@ $var wire 1 ( stop $end
 $var wire 32 1 testsqrt [31:0] $end
 $var wire 64 2 xin [63:0] $end
 $var wire 64 3 sqtestsqrt [63:0] $end
-$var wire 65 4 aux3 [64:0] $end
+$var wire 64 4 aux3 [63:0] $end
 $var wire 32 5 aux2 [31:0] $end
 $var wire 32 6 aux [31:0] $end
 $var wire 64 7 Q [63:0] $end
@@ -156,8 +156,8 @@ b0 ?
 1%
 #100
 b1000000000000000 9
-b1010001 =
 1'
+b1010001 =
 0%
 b1010001 )
 b1010001 2

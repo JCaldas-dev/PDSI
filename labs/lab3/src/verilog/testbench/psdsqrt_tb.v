@@ -66,8 +66,8 @@ begin
 
 	scan_file = $fscanf(data_file, "%d\n", arg0);
 	scan_file = $fscanf(data_file, "%d\n", arg1);
-	$display("TEST: %d", arg0);
-	$display("TEST: %d", arg1);
+	$display("Numero de bits: %d", arg0);
+	$display("Raiz de: %d", arg1);
 
 	NBITSIN = arg0;
 	clock = 1'b0;

@@ -10,7 +10,7 @@ module psdsqrt(
 
 wire [31:0] aux;
 wire [31:0] aux2;
-wire [64:0] aux3;
+wire [63:0] aux3;
 wire [63:0] Q;
 wire [63:0] sqtestsqrt;
 wire [31:0] testsqrt;
