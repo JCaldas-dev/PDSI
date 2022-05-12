@@ -3,11 +3,11 @@
 
 Square root sequential calculator
  
-jca@fe.up.pt, Nov 2018
+jca@fe.up.pt, Nov 2018 - May 2022
 
 	This Verilog code is property of University of Porto
 	Its utilization beyond the scope of the course Digital Systems Design
-	(Projeto de Sistemas Digitais) of the Integrated Master in Electrical 
+	(Projeto de Sistemas Digitais) of the Master in Electrical 
 	and Computer Engineering requires explicit authorization from the author.
  
 */
@@ -17,7 +17,7 @@ module psdsqrt(
 					input reset,		//synch reset, active high
 					input run,		    //start a new sqrt
 					output busy,			// busy, high while sqrt is running
-					input [31:0] xin,		// argument
+					input [31:0] xin,		// input argument, 32 bit unsigned
 					output [15:0] sqrt	    // square root
 				);
 
