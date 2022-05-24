@@ -1,21 +1,60 @@
 module alux(
-	input clock, 			// Master clock, active in the posedge
-	input reset, 			// Master reset, synchronous and active high
+	input clock,
+	input reset,
 	//--- Data input port ----------------------------------------------------
-	input regwen, 			// Register write enable: set to 1 to write the register
-							// selected by selwreg with the data at port inA
-	input [63:0] inA, 		// Data input
-	input [3:0] selwreg, 	// Select register index [0 to 15] to write data from port inA
-	input [1:0] endreg, 	// Data enable: 00-write both data fields
-							// 				10/01-write only data field selected by 1’b0
-							// 				11: swap high word and low word
+	input [63:0] inA,
+	input [63:0] inB,
+	input start,
+	input [4:0] opr,
 	//--- Data output ports --------------------------------------------------
-	output reg [63:0] outA, // Data output A, registered
-	output reg [63:0] outB, // Data output B, registered
-	input [3:0] seloutA, 	// Select register index [0 to 15] to output port outA
-	input [3:0] seloutB, 	// Select register index [0 to 15] to output port outB
-	input cnstA, 			// Define whether the output ports A and B are loaded with
-	input cnstB, 			// the contents of the register bank or a fixed constant
-	input enrregA, 			// Read enable to output register outA (loads output register)
-	input enrregB 			// Read enable to output register outB (loads output register)
+	output reg [63:0] outAB,
+	output done 
 );
+
+reg [5:0] aux [32];
+aux[0] = 1;
+aux[1] = 1;
+aux[2] = 2:
+aux[3] = 2;
+aux[4] = 6;
+aux[5] = 40;
+aux[6] = 4;
+aux[7] = 34;
+aux[8] = 1;
+aux[9] = 38;
+aux[10] = 38;
+reg [5:0] tmp;
+
+always @(posedge clock)
+if(reset)
+	outAB <= 64'h0;
+else
+begin
+	if(start == 1 &&  tmp == 0)
+		tmp = aux[opr];
+	if(tmp != 0)		
+		case(opr)
+			5'd0: begin
+					outAB <= inA;
+					done <= 1;
+					end
+			5'd1: begin
+					outAB <= inB;
+					done <= 1;
+					end
+			5'd2:
+			5'd3:
+			5'd4:
+			5'd5:
+			5'd6:
+			5'd7:
+			5'd8: begin
+					done <= 1;
+					end
+			5'd9:
+			5'd10:
+			default: outAB <= 64'b0;
+		tmp <= tmp - 1;
+end
+endmodule
+
