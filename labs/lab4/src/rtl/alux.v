@@ -1,4 +1,4 @@
-module reg_bank(
+module alux(
 	input clock, 			// Master clock, active in the posedge
 	input reset, 			// Master reset, synchronous and active high
 	//--- Data input port ----------------------------------------------------
@@ -19,60 +19,3 @@ module reg_bank(
 	input enrregA, 			// Read enable to output register outA (loads output register)
 	input enrregB 			// Read enable to output register outB (loads output register)
 );
-
-reg [0:63] bank [16];
-
-always @(posedge clock)
-if(reset)
-	begin
-		outA <= 32'h0;
-		outB <= 32'h0;
-	end
-else
-begin
-	if(regwen == 1)
-		begin
-			case(endreg)
-				2'b00: bank[selwreg] <= inA;
-				2b'01: bank[selwreg] <= (bank[selwreg] & 64'h00FF) | (inA & 64'hFF00);
-				2b'10: bank[selwreg] <= (bank[selwreg] & 64'hFF00) | (inA & 64'h00FF); 
-				default: bank[selwreg] <= ((inA & 64'h00FF) << 32) | ((inA & 64'hFF00) >> 32);
-			endcase
-		end
-		
-	if(enrregA)
-		if(cnstA)
-			begin
-				case(seloutA)
-					4'h1: outA <= 64'h0001;
-					4'h3: outA <= 64'h00FF;
-					4'h4: outA <= 64'h0100;
-					4'h5: outA <= 64'h0101;
-					4'h7: outA <= 64'h01FF;
-					4'hC: outA <= 64'hFF00;
-					4'hD: outA <= 64'hFF01;
-					4'hF: outA <= 64'hFFFF;
-					default: outA <= 64'h0000;
-			end
-		else
-			outA <= bank[seloutA];	
-	
-	if(enrregB)
-		if(cnstB)
-			begin
-				case(seloutB)
-					4'h1: outB <= 64'h0001;
-					4'h3: outB <= 64'h00FF;
-					4'h4: outB <= 64'h0100;
-					4'h5: outB <= 64'h0101;
-					4'h7: outB <= 64'h01FF;
-					4'hC: outB <= 64'hFF00;
-					4'hD: outB <= 64'hFF01;
-					4'hF: outB <= 64'hFFFF;
-					default: outB <= 64'h0000;
-			end
-		else
-			outB <= bank[seloutB];		
-end
-
-endmodule
