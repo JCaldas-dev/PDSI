@@ -24,9 +24,9 @@ parameter MAX_SIM_TIME = 100_000_000;     // Set the maximum simulation time (ti
 
 
 // Registers for driving the inputs:
-reg  clock, reset;
-reg  start, stop;
-reg  [63:0] x;
+reg clock, reset;
+reg start, stop;
+reg [63:0] x;
 reg [5:0] NBITSIN;
 // Wires to connect to the outputs:
 wire [31:0] sqrt;
