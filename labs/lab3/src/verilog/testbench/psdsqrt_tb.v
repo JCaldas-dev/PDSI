@@ -49,8 +49,8 @@ psdsqrt psdsqrt_1
 
 //---------------------------------------------------
 // Setup initial signals
-integer               data_file    ; // file handler
-integer               scan_file    ; // file handler
+integer data_file    ; // file handler
+integer scan_file    ; // file handler
 logic [5:0] arg0; //bytes
 logic [63:0] arg1; //sqrt test
 `define NULL 0    
