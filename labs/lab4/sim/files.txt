@@ -1,0 +1,2 @@
+../src/rtl/reg_bank.v
+../src/testbench/reg_bank_tb.v

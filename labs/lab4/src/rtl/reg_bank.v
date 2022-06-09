@@ -34,12 +34,12 @@ begin
 		begin
 			case(endreg)
 				2'b00: bank[selwreg] <= inA;
-				2b'01: bank[selwreg] <= (bank[selwreg] & 64'h00000000_FFFFFFFF) | (inA & 64'hFFFFFFFF_00000000);
-				2b'10: bank[selwreg] <= (bank[selwreg] & 64'hFFFFFFFF_00000000) | (inA & 64'h00000000_FFFFFFFF); 
+				2'b01: bank[selwreg] <= ((bank[selwreg] & 64'h00000000_FFFFFFFF) | (inA & 64'hFFFFFFFF_00000000));
+				2'b10: bank[selwreg] <= ((bank[selwreg] & 64'hFFFFFFFF_00000000) | (inA & 64'h00000000_FFFFFFFF));
 				default: bank[selwreg] <= ((inA & 64'h00000000_FFFFFFFF) << 32) | ((inA & 64'hFFFFFFFF_00000000) >> 32);
 			endcase
 		end
-		
+
 	if(enrregA)
 		if(cnstA)
 			begin
@@ -56,8 +56,8 @@ begin
 				endcase
 			end
 		else
-			outA <= bank[seloutA];	
-	
+			outA <= bank[seloutA];
+
 	if(enrregB)
 		if(cnstB)
 			begin
@@ -74,7 +74,7 @@ begin
 				endcase
 			end
 		else
-			outB <= bank[seloutB];		
+			outB <= bank[seloutB];
 end
 
 endmodule
